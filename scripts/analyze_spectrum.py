@@ -22,8 +22,11 @@ import csv
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import scienceplots  # noqa: F401 (registers 'science' style)
 import numpy as np
 from scipy.optimize import brentq
+
+plt.style.use(["science", "no-latex"])
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 FIG_DIR = Path(__file__).resolve().parents[1] / "figures"
