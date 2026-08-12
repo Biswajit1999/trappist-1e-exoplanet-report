@@ -1,20 +1,28 @@
 # Data source
 
-All three CSVs are downloaded, unmodified except for filename, from Zenodo
-record **10.5281/zenodo.13385020** ("Products of Combined analysis of the
-12.8 and 15 micron JWST/MIRI eclipse observations of TRAPPIST-1 b",
-Ducrot et al.):
+`trappist1e_decontaminated_spectrum.txt` is the final, stellar-
+contamination-corrected transmission spectrum of TRAPPIST-1e from
+Espinoza et al. (2025), "JWST-TST DREAMS: NIRSpec/PRISM Transmission
+Spectroscopy of the Habitable Zone Planet TRAPPIST-1e," *The
+Astrophysical Journal Letters*, 990(2), L52 (arXiv:2509.05414).
 
-- `trappist1b_miri_12um8_phasecurve.csv` ← `Fig1a_binned_data.csv`
-  (orbital-phase-folded, binned relative flux at 12.8 micron)
-- `trappist1b_miri_15um_phasecurve.csv` ← `Fig1b_binned_data.csv`
-  (same, at 15 micron)
-- `trappist1b_eclipse_depths.csv` ← `Fig2_observations.csv`
-  (measured secondary-eclipse depths and uncertainties at both wavelengths)
+Downloaded 2026-08-12 from the paper's data release, Zenodo record
+16125662, file `espinoza+2025/figure3/tspectra_decontaminated_corrected_flat_JWST-CLR-R10000.txt`
+within `TRAPPIST-1e-GTO-2025-main.zip` (the frozen snapshot of
+<https://github.com/nespinoza/TRAPPIST-1e-GTO-2025>).
 
-Retrieved: 2026-08-11, via `https://zenodo.org/api/records/13385020`.
+Three columns, no header in the original file: wavelength (microns),
+deviation from a flat continuum (ppm), and its uncertainty (ppm). 67
+wavelength points, R~10000, spanning four NIRSpec/PRISM transit visits
+combined and corrected for unocculted starspot/faculae contamination.
 
-Note: this data is for **TRAPPIST-1 b**, not TRAPPIST-1 e. It is included
-here as real system context, because TRAPPIST-1 e has no public JWST (or
-other) atmospheric spectrum as of this report -- see `index.html` for the
-explanation of why this substitution is made explicit rather than hidden.
+The same release also contains the four individual visit spectra as
+reduced independently by six different pipelines (Canas, Espinoza,
+Grant, Gressier, Long, Stevenson), plus two archival HST/WFC3 spectra
+used for a cross-instrument comparison in the paper — not included here
+to keep this repository small.
+
+An earlier version of this repository analyzed TRAPPIST-1b instead,
+because no TRAPPIST-1e-specific spectrum had been published at the
+time it was written. That is no longer the case; this version uses the
+planet's own data directly.

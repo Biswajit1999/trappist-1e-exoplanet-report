@@ -1,19 +1,20 @@
-"""Analyze real JWST MIRI eclipse data for TRAPPIST-1 b, as system context for
-interpreting TRAPPIST-1 e (which has no public atmospheric spectrum yet).
+"""Analyze the decontaminated JWST NIRSpec/PRISM transmission spectrum
+of TRAPPIST-1e, testing how consistent it is with a flat, featureless
+line -- the same first-pass test used elsewhere in this portfolio for
+other rocky planets (see the LHS 475b report).
 
-Data source: Zenodo record 10.5281/zenodo.13385020, "Products of Combined
-analysis of the 12.8 and 15 micron JWST/MIRI eclipse observations of
-TRAPPIST-1 b" (Ducrot et al.). Retrieved directly from Zenodo; reproduced
-unmodified in data/.
+Data source: Espinoza et al. (2025), JWST-TST DREAMS: NIRSpec/PRISM
+Transmission Spectroscopy of the Habitable Zone Planet TRAPPIST-1e,
+ApJL 990, L52 (arXiv:2509.05414), Zenodo record 16125662. See
+data/SOURCE.md for the exact file used.
 
-This script performs the same real physics used to conclude TRAPPIST-1 b
-has no thick atmosphere: it inverts each measured secondary-eclipse depth
-into a dayside brightness temperature (via the Planck function, using the
-real measured Rp/Rs and host Teff), then compares that temperature to the
-two theoretical limits for a bare rock -- full heat redistribution (an
-atmosphere efficiently spreads absorbed starlight around the planet) and
-zero redistribution (all absorbed energy re-radiates from the dayside
-only, i.e. no atmosphere to move heat around).
+This script's own flat-line chi-squared is a simpler test than the
+paper's own atmospheric retrieval, which combines this spectrum with
+instrument systematics modeling and forward-model grids to place
+quantitative limits on specific atmosphere types. The paper reports
+ruling out cloud-free, hydrogen-dominated atmospheres (>=80% H2 by
+volume) at better than 3-sigma; this script's own statistic is reported
+next to that, not as a substitute for it.
 """
 
 from __future__ import annotations
@@ -24,111 +25,65 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import scienceplots  # noqa: F401 (registers 'science' style)
 import numpy as np
-from scipy.optimize import brentq
 
 plt.style.use(["science", "no-latex"])
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 FIG_DIR = Path(__file__).resolve().parents[1] / "figures"
 
-H = 6.62607015e-34   # J s
-C = 2.99792458e8     # m/s
-KB = 1.380649e-23    # J/K
-
-# Real TRAPPIST-1 b system parameters (NASA Exoplanet Archive, pscomppars)
-RP_REARTH = 1.116
-RS_RSUN = 0.1192
-TEFF_STAR_K = 2566.0
-A_AU = 0.01154
-REARTH_M = 6.371e6
-RSUN_M = 6.957e8
-AU_M = 1.495978707e11
+PAPER_SIGNIFICANCE = 3.0  # paper's own stated rejection of a cloud-free, H2-dominated (>=80%) atmosphere
 
 
-def planck(wavelength_m: np.ndarray, temperature_k: float) -> np.ndarray:
-    return (2 * H * C**2 / wavelength_m**5) / (
-        np.expm1(H * C / (wavelength_m * KB * temperature_k))
-    )
-
-
-def brightness_temperature(eclipse_depth: float, wavelength_um: float) -> float:
-    wavelength_m = wavelength_um * 1e-6
-    rp_over_rs = (RP_REARTH * REARTH_M) / (RS_RSUN * RSUN_M)
-
-    def residual(t_planet: float) -> float:
-        predicted_depth = rp_over_rs**2 * planck(wavelength_m, t_planet) / planck(
-            wavelength_m, TEFF_STAR_K
-        )
-        return predicted_depth - eclipse_depth
-
-    return brentq(residual, 50, 3000)
-
-
-def load_observations(path: Path):
-    rows = []
+def load_spectrum(path: Path):
+    wave, dev_ppm, err_ppm = [], [], []
     with path.open() as handle:
-        reader = csv.DictReader(handle)
-        for row in reader:
-            rows.append(
-                {
-                    "wavelength": float(row["Wavelength"]),
-                    "depth_ppm": float(row["eclipse_depth"]),
-                    "depth_err_ppm": float(row["err_eclipse_depth"]),
-                }
-            )
-    return rows
+        for line in handle:
+            parts = line.split()
+            if len(parts) != 3:
+                continue
+            w, d, e = map(float, parts)
+            wave.append(w)
+            dev_ppm.append(d)
+            err_ppm.append(e)
+    return np.array(wave), np.array(dev_ppm), np.array(err_ppm)
 
 
 def main() -> None:
     FIG_DIR.mkdir(exist_ok=True)
-    observations = load_observations(DATA_DIR / "trappist1b_eclipse_depths.csv")
+    wave, dev_ppm, err_ppm = load_spectrum(DATA_DIR / "trappist1e_decontaminated_spectrum.txt")
 
-    a_m = A_AU * AU_M
-    rs_m = RS_RSUN * RSUN_M
-    t_zero_redistribution = TEFF_STAR_K * np.sqrt(rs_m / a_m) * (2.0 / 3.0) ** 0.25
-    t_full_redistribution = TEFF_STAR_K * np.sqrt(rs_m / (2 * a_m))
-
-    results = []
-    for obs in observations:
-        depth = obs["depth_ppm"] * 1e-6
-        depth_hi = (obs["depth_ppm"] + obs["depth_err_ppm"]) * 1e-6
-        depth_lo = max((obs["depth_ppm"] - obs["depth_err_ppm"]) * 1e-6, 1e-8)
-        t_best = brightness_temperature(depth, obs["wavelength"])
-        t_hi = brightness_temperature(depth_hi, obs["wavelength"])
-        t_lo = brightness_temperature(depth_lo, obs["wavelength"])
-        results.append({**obs, "t_day_k": t_best, "t_day_err_k": (t_hi - t_lo) / 2})
+    # Flat-line (featureless) fit: inverse-variance-weighted mean deviation.
+    weights = 1.0 / err_ppm**2
+    flat_dev = np.sum(dev_ppm * weights) / np.sum(weights)
+    flat_chi2 = np.sum(((dev_ppm - flat_dev) / err_ppm) ** 2)
+    dof = len(wave) - 1
+    reduced_chi2 = flat_chi2 / dof
 
     summary_path = FIG_DIR / "summary_statistics.csv"
     with summary_path.open("w", newline="") as handle:
         writer = csv.writer(handle)
         writer.writerow(["quantity", "value", "unit"])
-        writer.writerow(["t_zero_redistribution_bare_rock", f"{t_zero_redistribution:.1f}", "K"])
-        writer.writerow(["t_full_redistribution_bare_rock", f"{t_full_redistribution:.1f}", "K"])
-        for r in results:
-            writer.writerow(
-                [f"t_day_at_{r['wavelength']}um", f"{r['t_day_k']:.1f} +/- {r['t_day_err_k']:.1f}", "K"]
-            )
+        writer.writerow(["n_wavelength_points", len(wave), "count"])
+        writer.writerow(["flat_line_deviation", f"{flat_dev:.2f}", "ppm"])
+        writer.writerow(["flat_line_reduced_chi2_this_script", f"{reduced_chi2:.2f}", "dimensionless"])
+        writer.writerow(["paper_rejection_significance_h2_rich", f"{PAPER_SIGNIFICANCE}+", "sigma (Espinoza et al. 2025, full retrieval)"])
 
     fig, ax = plt.subplots(figsize=(8, 5.5))
-    waves = [r["wavelength"] for r in results]
-    temps = [r["t_day_k"] for r in results]
-    errs = [r["t_day_err_k"] for r in results]
-    ax.errorbar(waves, temps, yerr=errs, fmt="o", ms=8, color="#8a3c3c", label="TRAPPIST-1 b dayside T (this analysis)")
-    ax.axhline(t_zero_redistribution, color="#c0562a", ls="--", lw=1.3, label=f"bare rock, no redistribution ({t_zero_redistribution:.0f} K)")
-    ax.axhline(t_full_redistribution, color="#2c5f8a", ls="--", lw=1.3, label=f"bare rock, full redistribution ({t_full_redistribution:.0f} K)")
-    ax.set_xlabel("Wavelength [micron]")
-    ax.set_ylabel("Dayside brightness temperature [K]")
-    ax.set_title("TRAPPIST-1 b dayside temperature from real JWST MIRI eclipse depths\n(system context for interpreting TRAPPIST-1 e)")
-    ax.legend(fontsize=8, frameon=False)
+    ax.errorbar(wave, dev_ppm, yerr=err_ppm, fmt="o", ms=4, color="#1f4e79", capsize=2, label="Decontaminated NIRSpec/PRISM spectrum")
+    ax.axhline(flat_dev, color="#a8431f", ls="--", lw=1.5, label=f"Flat-line fit (χ²/dof = {reduced_chi2:.2f})")
+    ax.axhline(0, color="#999", ls=":", lw=1)
+    ax.set_xlabel("Wavelength [μm]")
+    ax.set_ylabel("Deviation from flat continuum [ppm]")
+    ax.set_title("TRAPPIST-1e: decontaminated transmission spectrum\n(Espinoza et al. 2025)")
+    ax.legend(fontsize=8)
     ax.grid(alpha=0.25)
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "trappist1b_dayside_temperature.png", dpi=200)
+    fig.savefig(FIG_DIR / "trappist1e_transmission_spectrum.png", dpi=200)
 
     print(f"Wrote {summary_path}")
-    print(f"Wrote {FIG_DIR / 'trappist1b_dayside_temperature.png'}")
-    print(f"Bare-rock limits: zero redistribution={t_zero_redistribution:.1f} K, full redistribution={t_full_redistribution:.1f} K")
-    for r in results:
-        print(f"  {r['wavelength']} um: T_day = {r['t_day_k']:.1f} +/- {r['t_day_err_k']:.1f} K")
+    print(f"Wrote {FIG_DIR / 'trappist1e_transmission_spectrum.png'}")
+    print(f"n={len(wave)}, flat-line deviation = {flat_dev:.2f} ppm, reduced chi2 = {reduced_chi2:.2f}")
+    print(f"Paper's own rejection of a cloud-free, H2-dominated (>=80%) atmosphere: {PAPER_SIGNIFICANCE}+ sigma")
 
 
 if __name__ == "__main__":

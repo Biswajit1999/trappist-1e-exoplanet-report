@@ -1,27 +1,28 @@
-# TRAPPIST-1 e — Exoplanet System Report
+# TRAPPIST-1 e — Exoplanet Atmosphere Report
 
-One of the most Earth-like planets known, in the habitable zone of an
-ultracool dwarf 12.4 parsecs away — and honestly reported: TRAPPIST-1 e has
-no published atmospheric spectrum of its own yet. This repo uses real JWST
-MIRI eclipse data for its siblings b and c to derive their dayside
-temperatures with real physics, setting the real observational context for
-e rather than fabricating a spectrum that doesn't exist.
+One of the most Earth-like planets known by size and insolation, and
+one of JWST's highest-priority habitable-zone targets. This repo tests
+its own decontaminated JWST NIRSpec/PRISM transmission spectrum for
+flatness and reports the result next to the atmosphere constraints
+Espinoza et al. (2025) actually publish.
 
 **[Open the full report](index.html)** (open locally in a browser, or serve
 with `python -m http.server` from this directory).
 
-## What's real here
+## Data sources
 
-- **System parameters** — TRAPPIST-1 e and b, queried live from the NASA
-  Exoplanet Archive TAP service (`pscomppars` table).
-- **JWST MIRI eclipse photometry** — real reduced secondary-eclipse depths
-  and phase-curve data for TRAPPIST-1 b at 12.8 and 15 microns, from Ducrot
-  et al., released publicly on Zenodo
-  ([10.5281/zenodo.13385020](https://doi.org/10.5281/zenodo.13385020)).
-- **Analysis** — `scripts/analyze_spectrum.py` inverts each real eclipse
-  depth into a dayside brightness temperature via the Planck function
-  (root-finding, not a lookup table), and compares it to the two
-  theoretical bare-rock heat-redistribution limits. Run it yourself:
+- **System parameters** — from the NASA Exoplanet Archive TAP
+  service (`pscomppars`).
+- **Transmission spectrum** — the decontaminated, stellar-contamination-
+  corrected combination of four NIRSpec/PRISM transits from Espinoza et
+  al. (2025), *JWST-TST DREAMS: NIRSpec/PRISM Transmission Spectroscopy
+  of the Habitable Zone Planet TRAPPIST-1e*, ApJL 990, L52
+  (arXiv:2509.05414). See [data/SOURCE.md](data/SOURCE.md) for the
+  exact file and Zenodo record.
+- **Analysis** — `scripts/analyze_spectrum.py` fits an inverse-
+  variance-weighted flat line to the spectrum and reports the reduced
+  chi-squared next to the paper's own atmosphere-rejection
+  significance. Run it yourself:
 
   ```bash
   pip install -r requirements.txt
@@ -32,40 +33,47 @@ with `python -m http.server` from this directory).
 
 ```text
 index.html              the report webpage
-data/                    real JWST MIRI eclipse/phase-curve CSVs (Zenodo)
-scripts/analyze_spectrum.py   real Planck-inversion analysis
+data/                    decontaminated NIRSpec/PRISM spectrum (Espinoza et al. 2025)
+scripts/analyze_spectrum.py   flat-line analysis, this script vs. the paper
 figures/                 generated plot + summary_statistics.csv
 ```
 
-## Key finding this repo shows directly
+## What the numbers show
 
-Real derived dayside brightness temperatures for TRAPPIST-1 b: 493 ± 37 K
-(12.6 um) and 579 ± 32 K (14.8 um), both at or above the 508 K "zero
-redistribution, bare rock" limit and well above the 398 K "full
-redistribution" limit — directly reproducing, from real data and real
-physics, the published conclusion that TRAPPIST-1 b has no thick,
-heat-redistributing atmosphere.
+A reduced chi-squared of 0.65 across 67 wavelength points is consistent
+with a flat, featureless spectrum, matching the paper's own
+description. Flatness alone doesn't rule out an atmosphere — a
+high-altitude cloud deck or a compact, high-mean-molecular-weight
+atmosphere can look flat too. Espinoza et al. (2025) push further with
+their own retrieval framework and report ruling out cloud-free,
+hydrogen-dominated atmospheres (at least 80% H2 by volume) at better
+than 3σ, while denser secondary atmospheres remain possible — addressed
+further in the companion paper by Glidden et al. (2025).
 
-## Why this matters for planet e
+## Limitations
 
-TRAPPIST-1 b and c orbit much closer to their star than e, so a bare-rock
-result for them does not automatically extend to e. But it establishes a
-real, load-bearing fact: this host star's activity and the inner planets'
-atmospheric histories make "has TRAPPIST-1 e kept an atmosphere at all" a
-genuinely open, first-order question — which is exactly why it remains a
-top-priority JWST target rather than a settled case.
+This repo's flat-line chi-squared is a first-pass check, not the
+retrieval the paper runs to reach its own quantitative atmosphere
+limits — it shouldn't be read as reproducing that result. An earlier
+version of this repository analyzed TRAPPIST-1b instead of e, because
+no TRAPPIST-1e-specific spectrum had been published when it was
+written; that's no longer the case, and this version uses the planet's
+own data.
 
 ## References
 
-1. Gillon, M. et al., 2017. Seven temperate terrestrial planets around the
-   nearby ultracool dwarf star TRAPPIST-1. *Nature*, 542, pp.456-460.
-2. Ducrot, E. et al. Combined analysis of the 12.8 and 15 micron JWST/MIRI
-   eclipse observations of TRAPPIST-1 b. Zenodo record
-   [10.5281/zenodo.13385020](https://doi.org/10.5281/zenodo.13385020).
-3. Greene, T.P. et al., 2023. Thermal emission from the Earth-sized
-   exoplanet TRAPPIST-1 b. *Nature*, 618, pp.39-42.
+1. Gillon, M. et al., 2017. Seven temperate terrestrial planets around
+   the nearby ultracool dwarf star TRAPPIST-1. *Nature*, 542,
+   pp.456-460.
+2. Espinoza, N. et al., 2025. JWST-TST DREAMS: NIRSpec/PRISM
+   Transmission Spectroscopy of the Habitable Zone Planet TRAPPIST-1 e.
+   *The Astrophysical Journal Letters*, 990(2), L52 (arXiv:2509.05414).
+3. Glidden, A. et al., 2025. JWST-TST DREAMS: Secondary Atmosphere
+   Constraints for the Habitable Zone Planet TRAPPIST-1 e. *The
+   Astrophysical Journal Letters*, 990(2), L53.
 4. Agol, E. et al., 2021. Refining the Transit-timing and Photometric
-   Analysis of TRAPPIST-1. *The Planetary Science Journal*, 2, 1.
+   Analysis of TRAPPIST-1: Masses, Radii, Densities, Dynamics, and
+   Ephemerides. *The Planetary Science Journal*, 2, 1.
 5. NASA Exoplanet Archive, <https://exoplanetarchive.ipac.caltech.edu/>.
 
 ## Author

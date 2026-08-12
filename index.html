@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TRAPPIST-1 e — A Habitable-Zone Rocky World, and What Its Siblings Tell Us</title>
-<meta name="description" content="Report on TRAPPIST-1 e: real system parameters, and a real JWST-derived dayside temperature analysis of its sibling planets b and c, honestly framing what is and isn't yet known about e itself.">
+<title>TRAPPIST-1 e — Testing Its JWST Spectrum for Flatness</title>
+<meta name="description" content="Report on TRAPPIST-1 e: a flat-line test on its decontaminated JWST NIRSpec/PRISM transmission spectrum, reported alongside Espinoza et al. (2025)'s own atmosphere constraints.">
 <style>
 :root {
   --bg:#f5f4ee; --panel:#ffffff; --line:#e0dccc; --text:#1b1a15; --muted:#6c6555;
@@ -50,13 +50,13 @@ footer a:hover { color: var(--accent); }
 <body>
 <div class="wrap">
   <header class="hero">
-    <p class="kicker">Exoplanet System Report · JWST MIRI (system context)</p>
+    <p class="kicker">Exoplanet Atmosphere Report · JWST NIRSpec/PRISM</p>
     <h1>TRAPPIST-1 e</h1>
-    <p class="tagline">One of the most Earth-like planets known by size and insolation, orbiting an ultracool dwarf just 12.4 parsecs away. This report states plainly what is and isn't yet known: TRAPPIST-1 e has no published atmospheric spectrum of its own, but real JWST data on its inner siblings b and c — analyzed here with real physics — sets the expectations against which any future e observation will be judged.</p>
+    <p class="tagline">One of the most Earth-like planets known by size and insolation, orbiting an ultracool dwarf 12.4 parsecs away, and one of JWST's highest-priority habitable-zone targets. This page tests its own decontaminated NIRSpec/PRISM transmission spectrum for flatness and reports the result next to Espinoza et al. (2025)'s published atmosphere constraints.</p>
     <div class="badges">
       <span class="badge">Transit-discovered, 2017</span>
-      <span class="badge">Real NASA Exoplanet Archive parameters</span>
-      <span class="badge">Real JWST MIRI eclipse data (siblings b, c)</span>
+      <span class="badge">NASA Exoplanet Archive parameters</span>
+      <span class="badge">JWST NIRSpec/PRISM spectrum, 4 visits (Espinoza et al. 2025)</span>
     </div>
   </header>
 
@@ -76,43 +76,37 @@ footer a:hover { color: var(--accent); }
   </section>
 
   <section>
-    <h2>An honest starting point: what's real for planet e, and what isn't yet</h2>
-    <p>TRAPPIST-1 is a system of seven roughly Earth-sized rocky planets, discovered by the TRAPPIST, Spitzer, and K2 surveys and refined through years of ground- and space-based follow-up — all seven planets' real orbital and physical parameters above come directly from that work. Planet e sits in the conventional habitable zone and is one of the highest-priority known targets for atmospheric characterization.</p>
-    <p class="callout">As of this report, there is no published, publicly released JWST (or other) atmospheric transmission or emission spectrum specifically for TRAPPIST-1 e. Real JWST atmospheric results so far cover the two innermost planets, b and c, via secondary-eclipse photometry — and this report uses that real data directly, rather than presenting a synthetic or illustrative spectrum for e that does not exist.</p>
+    <h2>A crowded, temperate system built for atmosphere-hunting</h2>
+    <p>TRAPPIST-1 is a system of seven roughly Earth-sized rocky planets around an ultracool M dwarf, discovered by the TRAPPIST, Spitzer, and K2 surveys and refined through years of follow-up. Planet e sits in the conventional habitable zone, and its small, cool, nearby host star gives an unusually favorable transit depth for atmospheric spectroscopy on a rocky planet — one of the reasons it's a flagship JWST target despite its Earth-like size.</p>
+    <p>Espinoza et al. (2025), part of the JWST-TST DREAMS program, combined four NIRSpec/PRISM transits of TRAPPIST-1e and corrected the resulting spectrum for contamination from unocculted starspots and faculae on the host star — a real, significant systematic for any planet transiting an active M dwarf, since spots and faculae imprint their own wavelength-dependent signal on the transit depth independent of the planet's atmosphere.</p>
   </section>
 
   <section>
-    <h2>What the real siblings b and c tell us</h2>
-    <p>Ducrot et al. combined JWST MIRI secondary-eclipse photometry of TRAPPIST-1 b at 12.8 and 15 microns to measure its dayside brightness temperature — the same real technique any future TRAPPIST-1 e observation will use. The figure below reproduces that inversion directly from the real published eclipse depths.</p>
+    <h2>Flat-line test on the decontaminated spectrum</h2>
+    <p>The figure shows the final spectrum after stellar-contamination correction, plotted as deviation from a flat continuum, with this page's own inverse-variance-weighted flat-line fit overlaid.</p>
     <div class="figure">
-      <img src="figures/trappist1b_dayside_temperature.png" alt="TRAPPIST-1 b real dayside brightness temperature from JWST MIRI eclipse depths, compared to bare-rock redistribution limits">
-      <figcaption>Dayside brightness temperature at each real measured wavelength (points), against the two theoretical bare-rock limits: full heat redistribution (efficient atmosphere) and zero redistribution (no atmosphere to move heat around). Generated by <code>scripts/analyze_spectrum.py</code>.</figcaption>
+      <img src="figures/trappist1e_transmission_spectrum.png" alt="TRAPPIST-1e decontaminated JWST NIRSpec/PRISM transmission spectrum with a flat-line fit">
+      <figcaption>67 wavelength points, 0.6-5.2 microns, R~10000. Generated by <code>scripts/analyze_spectrum.py</code>.</figcaption>
     </div>
     <div class="stat-grid">
-      <div class="stat"><span>T_day @ 12.6 um</span><strong>493 ± 37 K</strong></div>
-      <div class="stat"><span>T_day @ 14.8 um</span><strong>579 ± 32 K</strong></div>
-      <div class="stat"><span>No-redistribution limit</span><strong>508 K</strong></div>
-      <div class="stat"><span>Full-redistribution limit</span><strong>398 K</strong></div>
+      <div class="stat"><span>Flat-line deviation</span><strong>-5.0 ppm</strong></div>
+      <div class="stat"><span>Reduced χ² (this page)</span><strong>0.65</strong></div>
+      <div class="stat"><span>H2-rich atmosphere rejection (paper)</span><strong>&gt;3σ</strong></div>
     </div>
-    <p>Both derived temperatures sit at or above the "zero redistribution, bare rock" limit — consistent with a planet with little or no atmosphere to spread heat to its nightside, and inconsistent with a thick, heat-redistributing atmosphere. This directly reproduces the real published conclusion for TRAPPIST-1 b and c: "no thick atmosphere," using the real data and the same physics.</p>
+    <p class="callout">A reduced chi-squared of 0.65 across 67 points is consistent with a flat, featureless spectrum, matching the paper's own description. That flatness by itself doesn't prove the planet has no atmosphere — a high-altitude cloud deck or a compact, high-mean-molecular-weight atmosphere can look flat too. Espinoza et al. (2025) go further, running the spectrum through their own retrieval framework, and report ruling out cloud-free, hydrogen-dominated atmospheres (at least 80% H2 by volume) at better than 3σ, while denser secondary atmospheres remain an open possibility, addressed further in the companion analysis by Glidden et al. (2025).</p>
   </section>
 
   <section>
-    <h2>Why this matters for planet e</h2>
-    <p>TRAPPIST-1 b and c orbit far closer to their star than e and receive far more stellar irradiation (and stellar high-energy flux, which drives atmospheric escape) — so a bare-rock result for them does not automatically apply to e. But it does establish two real, load-bearing facts for interpreting any future observation of e: this host star is active enough, and the inner planets' atmospheric histories are hostile enough, that "does TRAPPIST-1 e have kept any atmosphere at all" is a live, unresolved, first-order question — not a settled one — which is exactly why it remains a top JWST target.</p>
-  </section>
-
-  <section>
-    <h2>How this data was obtained</h2>
-    <p>System parameters for TRAPPIST-1 e and b were queried live from the NASA Exoplanet Archive TAP service. The eclipse photometry is real reduced JWST MIRI data released publicly on Zenodo (record <a href="https://doi.org/10.5281/zenodo.13385020">10.5281/zenodo.13385020</a>). See <a href="data/">data/</a> for the exact CSVs as downloaded and <a href="scripts/analyze_spectrum.py">scripts/analyze_spectrum.py</a> for the brightness-temperature inversion (Planck-function root-finding) — run it yourself with <code>python scripts/analyze_spectrum.py</code>.</p>
+    <h2>Data and method notes</h2>
+    <p>System parameters come from the NASA Exoplanet Archive TAP service. The spectrum is the decontaminated, corrected combination of four NIRSpec/PRISM transits from Espinoza et al. (2025) — see <a href="data/SOURCE.md">data/SOURCE.md</a> for the exact file and where it comes from, and <a href="scripts/analyze_spectrum.py">scripts/analyze_spectrum.py</a> for the flat-line analysis (<code>python scripts/analyze_spectrum.py</code> to rerun it). This page's own reduced chi-squared test is a first-pass flatness check; it isn't the retrieval the paper runs to reach its own quantitative atmosphere limits, and shouldn't be read as reproducing that result.</p>
   </section>
 
   <section>
     <h2>References</h2>
     <ol class="refs">
       <li>Gillon, M. et al., 2017. Seven temperate terrestrial planets around the nearby ultracool dwarf star TRAPPIST-1. <em>Nature</em>, 542, pp.456-460.</li>
-      <li>Ducrot, E. et al. Combined analysis of the 12.8 and 15 micron JWST/MIRI eclipse observations of TRAPPIST-1 b. Zenodo record <a href="https://doi.org/10.5281/zenodo.13385020">10.5281/zenodo.13385020</a>.</li>
-      <li>Greene, T.P. et al., 2023. Thermal emission from the Earth-sized exoplanet TRAPPIST-1 b. <em>Nature</em>, 618, pp.39-42.</li>
+      <li>Espinoza, N. et al., 2025. JWST-TST DREAMS: NIRSpec/PRISM Transmission Spectroscopy of the Habitable Zone Planet TRAPPIST-1 e. <em>The Astrophysical Journal Letters</em>, 990(2), L52 (arXiv:2509.05414).</li>
+      <li>Glidden, A. et al., 2025. JWST-TST DREAMS: Secondary Atmosphere Constraints for the Habitable Zone Planet TRAPPIST-1 e. <em>The Astrophysical Journal Letters</em>, 990(2), L53.</li>
       <li>Agol, E. et al., 2021. Refining the Transit-timing and Photometric Analysis of TRAPPIST-1: Masses, Radii, Densities, Dynamics, and Ephemerides. <em>The Planetary Science Journal</em>, 2, 1.</li>
       <li>NASA Exoplanet Archive, <a href="https://exoplanetarchive.ipac.caltech.edu/">exoplanetarchive.ipac.caltech.edu</a> — system parameters, queried live via TAP.</li>
     </ol>
