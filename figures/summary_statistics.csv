@@ -1,5 +1,8 @@
 quantity,value,unit
 n_wavelength_points,67,count
 flat_line_deviation,-4.99,ppm
+flat_line_chi2,42.85,dimensionless
+flat_line_dof,66,count
 flat_line_reduced_chi2_this_script,0.65,dimensionless
+flat_line_p_value,0.988,"survival function, chi2.sf(chi2, dof)"
 paper_rejection_significance_h2_rich,3.0+,"sigma (Espinoza et al. 2025, full retrieval)"

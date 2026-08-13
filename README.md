@@ -40,25 +40,34 @@ figures/                 generated plot + summary_statistics.csv
 
 ## What the numbers show
 
-A reduced chi-squared of 0.65 across 67 wavelength points is consistent
-with a flat, featureless spectrum, matching the paper's own
-description. Flatness alone doesn't rule out an atmosphere — a
-high-altitude cloud deck or a compact, high-mean-molecular-weight
-atmosphere can look flat too. Espinoza et al. (2025) push further with
-their own retrieval framework and report ruling out cloud-free,
-hydrogen-dominated atmospheres (at least 80% H2 by volume) at better
-than 3σ, while denser secondary atmospheres remain possible — addressed
-further in the companion paper by Glidden et al. (2025).
+A chi-squared of 42.85 over 66 degrees of freedom (reduced χ² = 0.65,
+p = 0.988) across 67 wavelength points is consistent with a flat,
+featureless spectrum, matching the paper's own description. Flatness
+alone doesn't rule out an atmosphere — a high-altitude cloud deck or a
+compact, high-mean-molecular-weight atmosphere can look flat too.
+Espinoza et al. (2025) push further with their own retrieval framework
+and report ruling out cloud-free, hydrogen-dominated atmospheres (at
+least 80% H2 by volume) at better than 3σ, while denser secondary
+atmospheres remain possible — addressed further in the companion paper
+by Glidden et al. (2025).
 
 ## Limitations
 
-This repo's flat-line chi-squared is a first-pass check, not the
-retrieval the paper runs to reach its own quantitative atmosphere
-limits — it shouldn't be read as reproducing that result. An earlier
-version of this repository analyzed TRAPPIST-1b instead of e, because
-no TRAPPIST-1e-specific spectrum had been published when it was
-written; that's no longer the case, and this version uses the planet's
-own data.
+This repo's chi-squared treats each wavelength point's quoted error as
+independent (a diagonal-covariance likelihood). The paper's stellar-
+contamination correction was derived with a Gaussian-process
+marginalization over correlated systematics, which a diagonal
+chi-squared on the output spectrum doesn't reproduce — so this is a
+first-pass flatness check, not the retrieval the paper runs to reach
+its own quantitative atmosphere limits, and shouldn't be read as
+reproducing that result. Separately: NIRSpec/PRISM's actual resolving
+power is R~30-300 (wavelength-dependent, nominally R~100) — the
+"R10000" appearing in the source data filename labels the pipeline's
+internal wavelength resampling grid, not the spectrum's real spectral
+resolution. An earlier version of this repository analyzed TRAPPIST-1b
+instead of e, because no TRAPPIST-1e-specific spectrum had been
+published when it was written; that's no longer the case, and this
+version uses the planet's own data.
 
 ## References
 

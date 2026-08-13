@@ -15,6 +15,14 @@ quantitative limits on specific atmosphere types. The paper reports
 ruling out cloud-free, hydrogen-dominated atmospheres (>=80% H2 by
 volume) at better than 3-sigma; this script's own statistic is reported
 next to that, not as a substitute for it.
+
+This script's chi-squared treats each wavelength point's quoted error
+as independent (a diagonal-covariance likelihood). The paper's stellar-
+contamination correction was derived with a Gaussian-process
+marginalization over correlated systematics; a diagonal chi-squared on
+the output spectrum does not reproduce that covariance structure, so
+the reduced-chi2 value here should be read as a simple flatness check,
+not a like-for-like repeat of the paper's own statistical treatment.
 """
 
 from __future__ import annotations
@@ -25,6 +33,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import scienceplots  # noqa: F401 (registers 'science' style)
 import numpy as np
+from scipy.stats import chi2 as chi2_dist
 
 plt.style.use(["science", "no-latex"])
 
@@ -58,6 +67,7 @@ def main() -> None:
     flat_chi2 = np.sum(((dev_ppm - flat_dev) / err_ppm) ** 2)
     dof = len(wave) - 1
     reduced_chi2 = flat_chi2 / dof
+    p_value = chi2_dist.sf(flat_chi2, dof)
 
     summary_path = FIG_DIR / "summary_statistics.csv"
     with summary_path.open("w", newline="") as handle:
@@ -65,7 +75,10 @@ def main() -> None:
         writer.writerow(["quantity", "value", "unit"])
         writer.writerow(["n_wavelength_points", len(wave), "count"])
         writer.writerow(["flat_line_deviation", f"{flat_dev:.2f}", "ppm"])
+        writer.writerow(["flat_line_chi2", f"{flat_chi2:.2f}", "dimensionless"])
+        writer.writerow(["flat_line_dof", dof, "count"])
         writer.writerow(["flat_line_reduced_chi2_this_script", f"{reduced_chi2:.2f}", "dimensionless"])
+        writer.writerow(["flat_line_p_value", f"{p_value:.3f}", "survival function, chi2.sf(chi2, dof)"])
         writer.writerow(["paper_rejection_significance_h2_rich", f"{PAPER_SIGNIFICANCE}+", "sigma (Espinoza et al. 2025, full retrieval)"])
 
     fig, ax = plt.subplots(figsize=(8, 5.5))
@@ -82,7 +95,8 @@ def main() -> None:
 
     print(f"Wrote {summary_path}")
     print(f"Wrote {FIG_DIR / 'trappist1e_transmission_spectrum.png'}")
-    print(f"n={len(wave)}, flat-line deviation = {flat_dev:.2f} ppm, reduced chi2 = {reduced_chi2:.2f}")
+    print(f"n={len(wave)}, flat-line deviation = {flat_dev:.2f} ppm")
+    print(f"chi2 = {flat_chi2:.2f}, dof = {dof}, reduced chi2 = {reduced_chi2:.2f}, p-value = {p_value:.3f}")
     print(f"Paper's own rejection of a cloud-free, H2-dominated (>=80%) atmosphere: {PAPER_SIGNIFICANCE}+ sigma")
 
 

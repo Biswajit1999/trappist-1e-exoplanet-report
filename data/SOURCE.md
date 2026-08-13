@@ -13,8 +13,15 @@ within `TRAPPIST-1e-GTO-2025-main.zip` (the frozen snapshot of
 
 Three columns, no header in the original file: wavelength (microns),
 deviation from a flat continuum (ppm), and its uncertainty (ppm). 67
-wavelength points, R~10000, spanning four NIRSpec/PRISM transit visits
-combined and corrected for unocculted starspot/faculae contamination.
+wavelength points spanning four NIRSpec/PRISM transit visits combined
+and corrected for unocculted starspot/faculae contamination.
+
+The "R10000" in the filename is the pipeline's internal wavelength
+resampling grid, not the spectrum's actual spectral resolving power.
+NIRSpec/PRISM's real resolving power is low and wavelength-dependent,
+about R~30-300 across 0.6-5.3 microns (nominally R~100), per STScI's
+JWST NIRSpec documentation and consistent with the values quoted in
+Espinoza et al. (2025) itself.
 
 The same release also contains the four individual visit spectra as
 reduced independently by six different pipelines (Canas, Espinoza,
