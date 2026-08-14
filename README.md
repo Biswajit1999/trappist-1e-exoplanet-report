@@ -1,5 +1,9 @@
 # TRAPPIST-1 e — Exoplanet Atmosphere Report
 
+<img src="images/thumbnail.png" alt="Artist's concept of TRAPPIST-1 e" width="360">
+
+*AI-generated artist's concept — not a real photograph. See the report for actual JWST NIRSpec/PRISM data.*
+
 One of the most Earth-like planets known by size and insolation, and
 one of JWST's highest-priority habitable-zone targets. This repo tests
 its own decontaminated JWST NIRSpec/PRISM transmission spectrum for
