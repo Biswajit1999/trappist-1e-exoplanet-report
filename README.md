@@ -36,6 +36,19 @@ index.html              the report webpage
 data/                    decontaminated NIRSpec/PRISM spectrum (Espinoza et al. 2025)
 scripts/analyze_spectrum.py   flat-line analysis, this script vs. the paper
 figures/                 generated plot + summary_statistics.csv
+tests/                   unit tests + a regression check against the real data
+```
+
+## Tests
+
+`tests/test_analysis.py` checks the spectrum loader and the
+chi-squared/p-value formula against a known analytic case, and reruns
+the full pipeline on the real downloaded spectrum, verifying it still
+reproduces the numbers this README documents. Runs automatically on
+every push via GitHub Actions; run locally with:
+
+```bash
+pytest tests/ -v
 ```
 
 ## What the numbers show
