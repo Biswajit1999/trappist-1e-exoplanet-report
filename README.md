@@ -71,7 +71,7 @@ featureless spectrum, matching the paper's own description. Flatness
 alone doesn't rule out an atmosphere — a high-altitude cloud deck or a
 compact, high-mean-molecular-weight atmosphere can look flat too.
 Espinoza et al. (2025) push further with their own retrieval framework
-and report ruling out cloud-free, hydrogen-dominated atmospheres (at
+and report ruling out cloudy, primary hydrogen-dominated atmospheres (at
 least 80% H2 by volume) at better than 3σ, while denser secondary
 atmospheres remain possible — addressed further in the companion paper
 by Glidden et al. (2025).

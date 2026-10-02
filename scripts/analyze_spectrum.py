@@ -12,7 +12,7 @@ This script's own flat-line chi-squared is a simpler test than the
 paper's own atmospheric retrieval, which combines this spectrum with
 instrument systematics modeling and forward-model grids to place
 quantitative limits on specific atmosphere types. The paper reports
-ruling out cloud-free, hydrogen-dominated atmospheres (>=80% H2 by
+ruling out cloudy, primary hydrogen-dominated atmospheres (>=80% H2 by
 volume) at better than 3-sigma; this script's own statistic is reported
 next to that, not as a substitute for it.
 
@@ -40,7 +40,7 @@ plt.style.use(["science", "no-latex"])
 DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 FIG_DIR = Path(__file__).resolve().parents[1] / "figures"
 
-PAPER_SIGNIFICANCE = 3.0  # paper's own stated rejection of a cloud-free, H2-dominated (>=80%) atmosphere
+PAPER_SIGNIFICANCE = 3.0  # paper's own cloudy, primary H2-dominated (>=80%) constraint
 
 
 def load_spectrum(path: Path):
@@ -97,7 +97,7 @@ def main() -> None:
     print(f"Wrote {FIG_DIR / 'trappist1e_transmission_spectrum.png'}")
     print(f"n={len(wave)}, flat-line deviation = {flat_dev:.2f} ppm")
     print(f"chi2 = {flat_chi2:.2f}, dof = {dof}, reduced chi2 = {reduced_chi2:.2f}, p-value = {p_value:.3f}")
-    print(f"Paper's own rejection of a cloud-free, H2-dominated (>=80%) atmosphere: {PAPER_SIGNIFICANCE}+ sigma")
+    print(f"Paper's cloudy, primary H2-dominated (>=80%) constraint: {PAPER_SIGNIFICANCE}+ sigma")
 
 
 if __name__ == "__main__":
