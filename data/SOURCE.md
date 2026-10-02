@@ -23,11 +23,11 @@ about R~30-300 across 0.6-5.3 microns (nominally R~100), per STScI's
 JWST NIRSpec documentation and consistent with the values quoted in
 Espinoza et al. (2025) itself.
 
-The same release also contains the four individual visit spectra as
-reduced independently by six different pipelines (Canas, Espinoza,
-Grant, Gressier, Long, Stevenson), plus two archival HST/WFC3 spectra
-used for a cross-instrument comparison in the paper — not included here
-to keep this repository small.
+The repository now also preserves the release's four individual visit spectra
+as reduced by six teams/pipelines (Cañas, Espinoza, Grant, Gressier, Long,
+Stevenson). See `pipeline_visits/SOURCE.md`. The six products per visit share
+the same exposure, so they are comparative reductions rather than independent
+observations. The two archival HST/WFC3 spectra remain outside this audit.
 
 An earlier version of this repository analyzed TRAPPIST-1b instead,
 because no TRAPPIST-1e-specific spectrum had been published at the
