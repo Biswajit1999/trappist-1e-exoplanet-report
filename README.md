@@ -25,16 +25,16 @@ Espinoza et al. (2025) actually publish.
 
 - **System parameters** — from the NASA Exoplanet Archive TAP
   service (`pscomppars`).
-- **Transmission spectrum** — the decontaminated, stellar-contamination-
-  corrected combination of four NIRSpec/PRISM transits from Espinoza et
-  al. (2025), *JWST-TST DREAMS: NIRSpec/PRISM Transmission Spectroscopy
-  of the Habitable Zone Planet TRAPPIST-1e*, ApJL 990, L52
-  (arXiv:2509.05414). See [data/SOURCE.md](data/SOURCE.md) for the
-  exact file and Zenodo record.
-- **Analysis** — `scripts/analyze_spectrum.py` fits an inverse-
-  variance-weighted flat line to the spectrum and reports the reduced
-  chi-squared next to the paper's own atmosphere-rejection
-  significance. Run it yourself:
+- **Transmission products** — the final GP-decontaminated combination and
+  all 24 published pipeline/visit spectra from Espinoza et al. (2025),
+  *JWST-TST DREAMS: NIRSpec/PRISM Transmission Spectroscopy of the Habitable
+  Zone Planet TRAPPIST-1e*, ApJL 990, L52 (arXiv:2509.05414). Six pipelines
+  reduce each of four visits, so these are four observations—not 24
+  independent replicates. See [data/SOURCE.md](data/SOURCE.md) and
+  [data/pipeline_visits/SOURCE.md](data/pipeline_visits/SOURCE.md).
+- **Analysis** — `scripts/analyze_spectrum.py` fits descriptive constant-depth
+  models, compares pipeline sensitivity by visit, and exports CSV/JSON results
+  plus a three-panel scientific figure. Run it yourself:
 
   ```bash
   pip install -r requirements.txt
@@ -45,10 +45,10 @@ Espinoza et al. (2025) actually publish.
 
 ```text
 index.html              the report webpage
-data/                    decontaminated NIRSpec/PRISM spectrum (Espinoza et al. 2025)
-scripts/analyze_spectrum.py   flat-line analysis, this script vs. the paper
-figures/                 generated plot + summary_statistics.csv
-tests/                   unit tests + a regression check against the real data
+data/                    final spectrum + 24 pipeline/visit products
+scripts/analyze_spectrum.py   final-spectrum and reduction-sensitivity audit
+figures/                 generated figure plus CSV and JSON results
+tests/                   regression, grouping, output, and failure-mode tests
 ```
 
 ## Tests
@@ -65,10 +65,23 @@ pytest tests/ -v
 
 ## What the numbers show
 
-A chi-squared of 42.85 over 66 degrees of freedom (reduced χ² = 0.65,
-p = 0.988) across 67 wavelength points is consistent with a flat,
-featureless spectrum, matching the paper's own description. Flatness
-alone doesn't rule out an atmosphere — a high-altitude cloud deck or a
+A chi-squared of 42.85 over 66 degrees of freedom (reduced χ² = 0.649,
+p = 0.988) does not reject a fitted constant under the deliberately simple
+diagonal-error likelihood. The standardized-residual RMS is 0.800 and the
+largest absolute standardized residual is 1.930. The unusually high p-value
+is not positive evidence for a featureless planet; it can also reflect
+conservative marginal uncertainties or covariance omitted from this test.
+
+The 24 intermediate products add an important robustness diagnostic. Across
+the six reductions, the median weighted mean depths of visits 001, 002, 003,
+and 104 are 5089.6, 5075.4, 5014.9, and 4715.2 ppm. Visit 104 is 360.2 ppm
+below the median of the earlier visit medians in every reduction, while the
+between-pipeline range grows from roughly 90–96 ppm in visits 001–003 to
+160.0 ppm in visit 104. This is a visit/reduction sensitivity result, not an
+atmospheric signal. It helps motivate the published stellar-contamination and
+Gaussian-process treatment rather than replacing it.
+
+Flatness alone doesn't rule out an atmosphere—a high-altitude cloud deck or a
 compact, high-mean-molecular-weight atmosphere can look flat too.
 Espinoza et al. (2025) push further with their own retrieval framework
 and report ruling out cloudy, primary hydrogen-dominated atmospheres (at
@@ -78,12 +91,13 @@ by Glidden et al. (2025).
 
 ## Limitations
 
-This repo's chi-squared treats each wavelength point's quoted error as
+All constant fits in this repo treat each wavelength point's quoted error as
 independent (a diagonal-covariance likelihood). The paper's stellar-
 contamination correction was derived with a Gaussian-process
 marginalization over correlated systematics, which a diagonal
-chi-squared on the output spectrum doesn't reproduce — so this is a
-first-pass flatness check, not the retrieval the paper runs to reach
+chi-squared on the output spectrum doesn't reproduce. The six reductions per
+visit also share the same photons and must not be treated as independent
+evidence. This is a descriptive sensitivity audit, not the retrieval used to reach
 its own quantitative atmosphere limits, and shouldn't be read as
 reproducing that result. Separately: NIRSpec/PRISM's actual resolving
 power is R~30-300 (wavelength-dependent, nominally R~100) — the
