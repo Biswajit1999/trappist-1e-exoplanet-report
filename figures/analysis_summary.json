@@ -1,0 +1,58 @@
+{
+  "scope": {
+    "independent_visits": 4,
+    "reductions_per_visit": 6,
+    "pipeline_visit_files": 24,
+    "warning": "Six reductions of one visit are correlated analyses, not independent observations."
+  },
+  "final_decontaminated_flat_fit": {
+    "n_bins": 67,
+    "weighted_mean_ppm": -4.985301386843816,
+    "chi2": 42.848449709091305,
+    "dof": 66,
+    "reduced_chi2": 0.6492189349862318,
+    "p_value": 0.9879357634132704,
+    "standardized_residual_rms": 0.7997056334275076,
+    "max_abs_standardized_residual": 1.9297445334831156
+  },
+  "visit_summary": [
+    {
+      "visit": "001",
+      "n_pipeline_reductions": 6,
+      "median_weighted_mean_depth_ppm": 5089.580165685209,
+      "minimum_weighted_mean_depth_ppm": 5017.980402715773,
+      "maximum_weighted_mean_depth_ppm": 5114.259422496075,
+      "pipeline_range_ppm": 96.2790197803015,
+      "median_reduced_chi2": 1.929192078945047
+    },
+    {
+      "visit": "002",
+      "n_pipeline_reductions": 6,
+      "median_weighted_mean_depth_ppm": 5075.356607348953,
+      "minimum_weighted_mean_depth_ppm": 4997.598029261682,
+      "maximum_weighted_mean_depth_ppm": 5088.002290256056,
+      "pipeline_range_ppm": 90.40426099437354,
+      "median_reduced_chi2": 3.0375825981300624
+    },
+    {
+      "visit": "003",
+      "n_pipeline_reductions": 6,
+      "median_weighted_mean_depth_ppm": 5014.933822796048,
+      "minimum_weighted_mean_depth_ppm": 4992.574295466295,
+      "maximum_weighted_mean_depth_ppm": 5085.155144831791,
+      "pipeline_range_ppm": 92.58084936549676,
+      "median_reduced_chi2": 1.8637883690906603
+    },
+    {
+      "visit": "104",
+      "n_pipeline_reductions": 6,
+      "median_weighted_mean_depth_ppm": 4715.165119915416,
+      "minimum_weighted_mean_depth_ppm": 4596.290874410837,
+      "maximum_weighted_mean_depth_ppm": 4756.310086756253,
+      "pipeline_range_ppm": 160.01921234541624,
+      "median_reduced_chi2": 4.033135110623876
+    }
+  ],
+  "visit_104_median_offset_from_earlier_visit_median_ppm": -360.1914874335371,
+  "inference_boundary": "Descriptive diagonal-error audit only; no atmospheric detection, model selection, or retrieval is performed."
+}
