@@ -33,3 +33,7 @@ An earlier version of this repository analyzed TRAPPIST-1b instead,
 because no TRAPPIST-1e-specific spectrum had been published at the
 time it was written. That is no longer the case; this version uses the
 planet's own data directly.
+
+The LF-normalized SHA-256 of the committed final spectrum is
+`d07c0aa4916a714f5cdb6205d653b3bf57159e2cde9e18c1c616c43786ea8835`.
+Run `python scripts/validate_data.py` to verify it and the pipeline set.

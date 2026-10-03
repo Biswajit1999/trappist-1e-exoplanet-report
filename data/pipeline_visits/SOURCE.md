@@ -16,3 +16,7 @@ These are not 24 independent observations: the six pipelines reprocess the
 same four visits. They are included to separate visit-to-visit stellar/
 instrument variability from reduction-pipeline sensitivity before assessing
 the final GP-decontaminated combined spectrum.
+
+For a deterministic set digest, files are sorted by name and SHA-256 is fed
+each UTF-8 filename, a null byte, and its LF-normalized contents. The resulting
+digest is `4d268a522a7ef44f946754f658d68a99ce515c30281ebc5b59d7bbbb01116fdc`.
