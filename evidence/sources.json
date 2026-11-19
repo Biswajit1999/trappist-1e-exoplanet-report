@@ -1,0 +1,71 @@
+{
+  "project": "TRAPPIST-1 e — Exoplanet Atmosphere Report",
+  "repository": "https://github.com/Biswajit1999/trappist-1e-exoplanet-report",
+  "files": [
+    {
+      "label": "Data source notes",
+      "path": "data/SOURCE.md",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Trappist1e decontaminated spectrum",
+      "path": "data/trappist1e_decontaminated_spectrum.txt",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "JWST PRISM Canas001",
+      "path": "data/pipeline_visits/JWST_PRISM_Canas001.txt",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "JWST PRISM Canas002",
+      "path": "data/pipeline_visits/JWST_PRISM_Canas002.txt",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "JWST PRISM Canas003",
+      "path": "data/pipeline_visits/JWST_PRISM_Canas003.txt",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "JWST PRISM Canas104",
+      "path": "data/pipeline_visits/JWST_PRISM_Canas104.txt",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "JWST PRISM Espinoza001",
+      "path": "data/pipeline_visits/JWST_PRISM_Espinoza001.txt",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Analysis summary",
+      "path": "figures/analysis_summary.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Summary statistics",
+      "path": "figures/summary_statistics.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Visit summary",
+      "path": "figures/visit_summary.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Pipeline visit metrics",
+      "path": "figures/pipeline_visit_metrics.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Trappist1e transmission spectrum",
+      "path": "figures/trappist1e_transmission_spectrum.png",
+      "role": "Figures"
+    },
+    {
+      "label": "Trappist1e spectral audit",
+      "path": "figures/trappist1e_spectral_audit.png",
+      "role": "Figures"
+    }
+  ]
+}
